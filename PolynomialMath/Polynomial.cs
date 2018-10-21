@@ -27,23 +27,9 @@ namespace PolynomialMath
             int secondPolLength = secondObj.coefficients.Length;
             int size = firstPolLength > secondPolLength ? firstPolLength : secondPolLength;
             double[] newCoeffArray = new double[size];
+            firstObj.coefficients.CopyTo(newCoeffArray, 0);
             for (int i = 0; i < size; i++)
-            {
-                if (firstPolLength != 0 && secondPolLength != 0)
-                {
-                    newCoeffArray[i] = firstObj.coefficients[i] + secondObj.coefficients[i];
-                    firstPolLength--;
-                    secondPolLength--;
-                }
-                else if (firstPolLength == 0)
-                {
-                    newCoeffArray[i] = secondObj.coefficients[i];
-                }
-                else
-                {
-                    newCoeffArray[i] = firstObj.coefficients[i];
-                }
-            }
+                newCoeffArray[i] += secondObj.coefficients[i];
             return new Polynomial(newCoeffArray);
         }
         public static Polynomial operator -(Polynomial firstObj, Polynomial secondObj)
@@ -52,23 +38,9 @@ namespace PolynomialMath
             int secondPolLength = secondObj.coefficients.Length;
             int size = firstPolLength > secondPolLength ? firstPolLength : secondPolLength;
             double[] newCoeffArray = new double[size];
+            firstObj.coefficients.CopyTo(newCoeffArray, 0);
             for (int i = 0; i < size; i++)
-            {
-                if (firstPolLength != 0 && secondPolLength != 0)
-                {
-                    newCoeffArray[i] = firstObj.coefficients[i] - secondObj.coefficients[i];
-                    firstPolLength--;
-                    secondPolLength--;
-                }
-                else if (firstPolLength == 0)
-                {
-                    newCoeffArray[i] = -secondObj.coefficients[i];
-                }
-                else
-                {
-                    newCoeffArray[i] = firstObj.coefficients[i];
-                }
-            }
+                newCoeffArray[i] -= secondObj.coefficients[i];
             return new Polynomial(newCoeffArray);
         }
         public static Polynomial operator *(Polynomial firstObj, Polynomial secondObj)
@@ -95,18 +67,10 @@ namespace PolynomialMath
         }
         public static bool operator !=(Polynomial firstObj, Polynomial secondObj)
         {
-            int firstPolLength = firstObj.coefficients.Length;
-            int secondPolLength = secondObj.coefficients.Length;
-            if (firstPolLength != secondPolLength)
-                return true;
-            for (int i = 0; i < firstPolLength; i++)
-                if (firstObj.coefficients[i] != secondObj.coefficients[i])
-                    return true;
-            return false;
+            return !(firstObj == secondObj);
         }
         public override string ToString()
-        {
-            
+        {        
             string polView = coefficients[0].ToString();
             for(int i = 1; i <coefficients.Length; i++)
                 polView += " + " + coefficients[i] + "x^" + i;
@@ -114,7 +78,10 @@ namespace PolynomialMath
         }
         public override bool Equals(Object obj)
         {
-            return (this == obj);
+            if (obj is Polynomial)
+                return (this == (Polynomial)obj);
+            else
+                return false;
         }
         public override int GetHashCode()
         {
