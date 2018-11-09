@@ -4,8 +4,6 @@ namespace PolynomialMath
 {
     public class Polynomial
     {
-        private double[] coeff;
-
         /// <summary>
         /// Constructor with parameters, initializes polynomial object coefficients
         /// </summary>
@@ -15,14 +13,16 @@ namespace PolynomialMath
         {
             if (initialParams != null && initialParams.Length != 0)
             {
-                coeff = new double[initialParams.Length];
-                initialParams.CopyTo(coeff, 0);
+                Coeff = new double[initialParams.Length];
+                initialParams.CopyTo(Coeff, 0);
             }
             else
             {
                 throw new ArgumentNullException("Array of coefficients is null or empty");
             }            
         }
+
+        public double[] Coeff { get; private set; }
 
         /// <summary>
         /// Finds the sum of the input polynomial objects 
@@ -32,15 +32,15 @@ namespace PolynomialMath
         /// <returns>New polynomial object with summarized coefficients</returns>
         public static Polynomial operator +(Polynomial arg1, Polynomial arg2)
         {
-            int size = arg1.coeff.Length > arg2.coeff.Length ? arg1.coeff.Length : arg2.coeff.Length;
+            int size = arg1.Coeff.Length > arg2.Coeff.Length ? arg1.Coeff.Length : arg2.Coeff.Length;
 
             double[] newCoeffArray = new double[size];
 
-            arg1.coeff.CopyTo(newCoeffArray, 0);
+            arg1.Coeff.CopyTo(newCoeffArray, 0);
 
-            for (int i = 0; i < arg2.coeff.Length; i++)
+            for (int i = 0; i < arg2.Coeff.Length; i++)
             {
-                newCoeffArray[i] += arg2.coeff[i];
+                newCoeffArray[i] += arg2.Coeff[i];
             }
 
             return new Polynomial(newCoeffArray);
@@ -64,11 +64,11 @@ namespace PolynomialMath
         /// <returns>New polynomial object with invert coefficients</returns>
         public static Polynomial operator -(Polynomial arg)
         {
-            double[] newCoeffArray = new double[arg.coeff.Length];
+            double[] newCoeffArray = new double[arg.Coeff.Length];
 
             for (int i = 0; i < newCoeffArray.Length; i++)
             {
-                newCoeffArray[i] = -arg.coeff[i];
+                newCoeffArray[i] = -arg.Coeff[i];
             }
 
             return new Polynomial(newCoeffArray);
@@ -82,9 +82,9 @@ namespace PolynomialMath
         /// <returns>New polynomial object with multiplied coefficients</returns>
         public static Polynomial operator *(Polynomial arg1, Polynomial arg2)
         {
-            int firstPolLength = arg1.coeff.Length;
+            int firstPolLength = arg1.Coeff.Length;
      
-            int secondPolLength = arg2.coeff.Length;
+            int secondPolLength = arg2.Coeff.Length;
 
             int size = firstPolLength + secondPolLength - 1;
 
@@ -94,7 +94,7 @@ namespace PolynomialMath
             {
                 for (int j = 0; j < secondPolLength; j++)
                 {
-                    newCoeffArray[i + j] += arg1.coeff[i] * arg2.coeff[j];
+                    newCoeffArray[i + j] += arg1.Coeff[i] * arg2.Coeff[j];
                 }
             }
 
@@ -109,9 +109,9 @@ namespace PolynomialMath
         /// <returns>True(equality) or false(inequality)</returns>
         public static bool operator ==(Polynomial arg1, Polynomial arg2)
         {
-            int firstPolLength = arg1.coeff.Length;
+            int firstPolLength = arg1.Coeff.Length;
 
-            int secondPolLength = arg2.coeff.Length;
+            int secondPolLength = arg2.Coeff.Length;
 
             if (firstPolLength != secondPolLength)
             {
@@ -120,7 +120,7 @@ namespace PolynomialMath
 
             for (int i = 0; i < firstPolLength; i++)
             {
-                if (arg1.coeff[i] != arg2.coeff[i])
+                if (arg1.Coeff[i] != arg2.Coeff[i])
                 {
                     return false;
                 }
@@ -146,11 +146,11 @@ namespace PolynomialMath
         /// <returns>String representation of object</returns>
         public override string ToString()
         {        
-            string polView = coeff[0].ToString();
+            string polView = Coeff[0].ToString();
 
-            for (int i = 1; i < coeff.Length; i++)
+            for (int i = 1; i < Coeff.Length; i++)
             {
-                polView += " + " + coeff[i] + "x^" + i;
+                polView += " + " + Coeff[i] + "x^" + i;
             }
 
             return polView;
@@ -179,11 +179,11 @@ namespace PolynomialMath
         /// <returns>psevdounique number</returns>
         public override int GetHashCode()
         {
-            int hashcode = coeff[0].GetHashCode();
+            int hashcode = Coeff[0].GetHashCode();
 
-            for (int i = 1; i < coeff.Length; i++)
+            for (int i = 1; i < Coeff.Length; i++)
             {
-                hashcode ^= coeff[i].GetHashCode();
+                hashcode ^= Coeff[i].GetHashCode();
             }
 
             return hashcode;
